@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 public class Main {
@@ -5,7 +7,7 @@ public class Main {
     public static int NUMBER = 0;
 
     public static void main(String[] args) {
-        personalData();
+        drawFlags();
     }
 
     /* Exercise 1
@@ -208,5 +210,169 @@ public class Main {
     }
 
     // Exercise 16
+    public static void numberToWord(int number) {
+        switch (number) {
+            case 1:
+                System.out.println("One");
+                break;
+            case 2:
+                System.out.println("Two");
+                break;
+            case 3:
+                System.out.println("Three");
+                break;
+            case 4:
+                System.out.println("Four");
+                break;
+            case 5:
+                System.out.println("Five");
+                break;
+            case 6:
+                System.out.println("Six");
+                break;
+            case 7:
+                System.out.println("Seven");
+                break;
+            case 8:
+                System.out.println("Eight");
+                break;
+            case 9:
+                System.out.println("Nine");
+                break;
+        }
+    }
 
+    public static boolean isPositive(int number) {
+        return (number >= 0);
+    }
+
+    // Exercise 17
+    public static void createTreeWithLoops() {
+        int columns = 6;
+        int maxRowSize = 20;
+        int asteriskCount = 2;
+        boolean firstLine = true;
+        String bottomLine = "";
+        for(int index = 0; index < columns; index++) {
+            String currentLine = "";
+            int currentSpaces = maxRowSize - asteriskCount;
+            currentSpaces /= 2;
+            for(int subIndex = 0; subIndex < currentSpaces; subIndex++) {
+                currentLine += " ";
+            }
+            for(int subIndex2 = 0; subIndex2 < asteriskCount; subIndex2++) {
+                currentLine += "*";
+            }
+            for(int subIndex = 0; subIndex < currentSpaces; subIndex++) {
+                currentLine += " ";
+            }
+            System.out.print(currentLine);
+            if(firstLine) {
+                bottomLine = currentLine;
+            }
+            firstLine = false;
+            System.out.print("\n");
+            asteriskCount += 2;
+        }
+        for(int i = 0; i < 2; i++) {
+            System.out.println(bottomLine);
+        }
+    }
+
+    // Exercise 18
+    public static ArrayList<Integer> getOddNumbers(int[] numbers) {
+        ArrayList<Integer> oddNumbers = new ArrayList<>();
+        for(int i = 0; i < numbers.length; i++) {
+            if(numbers[i] % 2 == 0) {
+                oddNumbers.add(numbers[i]);
+            }
+        }
+        return oddNumbers;
+    }
+
+    public static ArrayList<Integer> getMultiplesOf3(int[] numbers) {
+        ArrayList<Integer> oddNumbers = new ArrayList<>();
+        for(int i = 0; i < numbers.length; i++) {
+            if(numbers[i] % 3 == 0) {
+                oddNumbers.add(numbers[i]);
+            }
+        }
+        return oddNumbers;
+    }
+
+    public static void greetMultipleTimes(int times) {
+        int index = 0;
+        do {
+            System.out.println("Hello!");
+            index++;
+        } while (index < times);
+    }
+
+    public static void reverseAlphabet() {
+        String reverseAlphabet = "ZYXWVTSRQPONMLKJIHGFEDCBA";
+        int alphabetSize = reverseAlphabet.length();
+        ArrayList<String> removedLetters = new ArrayList<>();
+
+        for(char character: reverseAlphabet.toCharArray()) {
+            if(character != 'A') {
+                removedLetters.add(Character.toString(character));
+                reverseAlphabet = reverseAlphabet.substring(1);
+                System.out.println(reverseAlphabet);
+            }
+        }
+        Collections.reverse(removedLetters);
+        for(String letter: removedLetters) {
+            reverseAlphabet += letter;
+            System.out.println(reverseAlphabet);
+        }
+    }
+
+    // Exercise 19
+    public static void exitAtThirdIteration() {
+        int index = 0;
+        while(index < 3) {
+            index++;
+        }
+    }
+
+    // Exercise 20
+    public static String javaOrNull(String param) {
+        if(param == "java") {
+            return param;
+        } else {
+            return null;
+        }
+    }
+
+    public static boolean login(String user, String password) {
+        return (user == "admin" && password == "1234");
+    }
+
+    public static boolean randomOddOrEven() {
+        Random random = new Random();
+        int min = 1;
+        int max = 100;
+        int randomNumber = random.nextInt(max - min + 1) + min;
+        return (randomNumber % 2 == 0);
+    }
+
+    // Exercise 21
+    public static void drawFlags() {
+        String blue = "\u001B[34m";
+        String yellow = "\u001B[33m";
+        String bold = "\u001B[1m";
+        String underline = "\u001B[4m";
+        String reset = "\u001B[0m";
+        String horizontalLine = "████████████████████";
+
+        String[] ukrainianFlag = {
+                blue + horizontalLine + reset,
+                yellow + horizontalLine + reset
+        };
+
+        for (String line : ukrainianFlag) {
+            System.out.println(line);
+        }
+        System.out.println(bold + underline + "Stay with Ukraine" + reset);
+    }
 }
