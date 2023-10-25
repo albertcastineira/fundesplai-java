@@ -7,7 +7,12 @@ public class Main {
     public static int NUMBER = 0;
 
     public static void main(String[] args) {
-        drawFlags();
+        drawFlag("test", new String[]{
+                "magenta,5,no",
+                "yellow,5,break",
+                "red,10,break",
+                "green,10,break"
+        });
     }
 
     /* Exercise 1
@@ -357,22 +362,60 @@ public class Main {
     }
 
     // Exercise 21
-    public static void drawFlags() {
-        String blue = "\u001B[34m";
-        String yellow = "\u001B[33m";
+    public static void drawFlag(String flagName, String[] colorDigitBreak) {
+        String whiteColor = "\u001B[47m";
+        String blackColor = "\u001B[30m";
+        String redColor = "\u001B[31m";
+        String greenColor = "\u001B[32m";
+        String magentaColor = "\u001B[35m";
+        String blueColor = "\u001B[34m";
+        String yellowColor = "\u001B[33m";
+
         String bold = "\u001B[1m";
         String underline = "\u001B[4m";
         String reset = "\u001B[0m";
-        String horizontalLine = "████████████████████";
+        String singleBlock = "█";
 
-        String[] ukrainianFlag = {
-                blue + horizontalLine + reset,
-                yellow + horizontalLine + reset
-        };
+        int maxCharWidth = 18;
 
-        for (String line : ukrainianFlag) {
-            System.out.println(line);
+        for(String action: colorDigitBreak ) {
+            String color = splitByCommas(action)[0];
+            switch (color) {
+                case "white":
+                    color = whiteColor;
+                    break;
+                case "black":
+                    color = blackColor;
+                    break;
+                case "red":
+                    color = redColor;
+                    break;
+                case "green":
+                    color = greenColor;
+                    break;
+                case "magenta":
+                    color = magentaColor;
+                    break;
+                case "blue":
+                    color = blueColor;
+                    break;
+                case "yellow":
+                    color = yellowColor;
+                    break;
+
+            }
+            int digit = Integer.parseInt(splitByCommas(action)[1]);
+            boolean isBreak = splitByCommas(action)[2].equals("break");
+            for(int i = 0; i < digit; i++) {
+                System.out.print(reset + color + singleBlock);
+            }
+            if(isBreak) {
+                System.out.print("\n");
+            }
         }
-        System.out.println(bold + underline + "Stay with Ukraine" + reset);
+    }
+
+    public static String[] splitByCommas(String text) {
+        return text.split(",");
     }
 }
