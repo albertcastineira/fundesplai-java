@@ -550,7 +550,8 @@ public class Main {
         }
     }
 
-    /* Exercise 29 code on package main
+    // Exercise 29
+    /* Code on package main
     *  We can import methods using: import com.actions.HelloWorld;
     *  Or we can import all actions using: import com.actions.*;
     */
