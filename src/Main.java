@@ -5,14 +5,20 @@ import java.util.Random;
 public class Main {
 
     public static int NUMBER = 0;
+    public static String[] GREECE_FLAG = {
+            "blue,3,no", "white,2,no", "blue,15,break",
+            "blue,3,no", "white,2,no", "blue,3,no", "white,12,break",
+            "white,8,no", "blue,12,break",
+            "blue,3,no", "white,2,no", "blue,3,no", "white,12,break",
+            "blue,3,no", "white,2,no", "blue,15,break",
+            "white,20,break",
+            "blue,20,break",
+            "white,20,break",
+            "blue,20,break"
+    };
 
     public static void main(String[] args) {
-        drawFlag("test", new String[]{
-                "magenta,5,no",
-                "yellow,5,break",
-                "red,10,break",
-                "green,10,break"
-        });
+        drawFlag("Greece",GREECE_FLAG);
     }
 
     /* Exercise 1
@@ -374,7 +380,7 @@ public class Main {
         String bold = "\u001B[1m";
         String underline = "\u001B[4m";
         String reset = "\u001B[0m";
-        String singleBlock = "█";
+        String singleBlock = "██";
 
         int maxCharWidth = 18;
 
@@ -410,12 +416,15 @@ public class Main {
                 System.out.print(reset + color + singleBlock);
             }
             if(isBreak) {
-                System.out.print("\n");
+                System.out.print(reset + "\n");
             }
         }
+        System.out.println(reset + bold + underline + flagName);
     }
 
     public static String[] splitByCommas(String text) {
         return text.split(",");
     }
+
+
 }
