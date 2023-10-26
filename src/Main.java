@@ -3,9 +3,19 @@ import java.util.Collections;
 import java.util.Random;
 
 public class Main {
-
     public static int NUMBER = 0;
-    public static String[] GREECE_FLAG = {
+    public static String WHITE_COLOR = "\u001B[47m";
+    public static String BLACK_COLOR = "\u001B[30m";
+    public static String RED_COLOR = "\u001B[31m";
+    public static String GREEN_COLOR = "\u001B[32m";
+    public static String MAGENTA_COLOR = "\u001B[35m";
+    public static String BLUE_COLOR = "\u001B[34m";
+    public static String YELLOW_COLOR = "\u001B[33m";
+    public static String BOLD = "\u001B[1m";
+    public static String UNDERLINE = "\u001B[4m";
+    public static String RESET = "\u001B[0m";
+    public static String SINGLE_BLOCK = "██";
+    public static String[] GREECE_FLAG_LINES = {
             "blue,3,no", "white,2,no", "blue,15,break",
             "blue,3,no", "white,2,no", "blue,3,no", "white,12,break",
             "white,8,no", "blue,12,break",
@@ -18,7 +28,7 @@ public class Main {
     };
 
     public static void main(String[] args) {
-        drawFlag("Greece",GREECE_FLAG);
+        iterationUsingRecursion();
     }
 
     /* Exercise 1
@@ -369,18 +379,7 @@ public class Main {
 
     // Exercise 21
     public static void drawFlag(String flagName, String[] colorDigitBreak) {
-        String whiteColor = "\u001B[47m";
-        String blackColor = "\u001B[30m";
-        String redColor = "\u001B[31m";
-        String greenColor = "\u001B[32m";
-        String magentaColor = "\u001B[35m";
-        String blueColor = "\u001B[34m";
-        String yellowColor = "\u001B[33m";
 
-        String bold = "\u001B[1m";
-        String underline = "\u001B[4m";
-        String reset = "\u001B[0m";
-        String singleBlock = "██";
 
         int maxCharWidth = 18;
 
@@ -388,43 +387,231 @@ public class Main {
             String color = splitByCommas(action)[0];
             switch (color) {
                 case "white":
-                    color = whiteColor;
+                    color = WHITE_COLOR;
                     break;
                 case "black":
-                    color = blackColor;
+                    color = BLACK_COLOR;
                     break;
                 case "red":
-                    color = redColor;
+                    color = RED_COLOR;
                     break;
                 case "green":
-                    color = greenColor;
+                    color = GREEN_COLOR;
                     break;
                 case "magenta":
-                    color = magentaColor;
+                    color = MAGENTA_COLOR;
                     break;
                 case "blue":
-                    color = blueColor;
+                    color = BLUE_COLOR;
                     break;
                 case "yellow":
-                    color = yellowColor;
+                    color = YELLOW_COLOR;
+                    break;
+                default:
+                    color = WHITE_COLOR;
                     break;
 
             }
             int digit = Integer.parseInt(splitByCommas(action)[1]);
             boolean isBreak = splitByCommas(action)[2].equals("break");
             for(int i = 0; i < digit; i++) {
-                System.out.print(reset + color + singleBlock);
+                System.out.print(RESET + color + SINGLE_BLOCK);
             }
             if(isBreak) {
-                System.out.print(reset + "\n");
+                System.out.print(RESET + "\n");
             }
         }
-        System.out.println(reset + bold + underline + flagName);
+        System.out.println(RESET + BOLD + UNDERLINE + flagName);
     }
 
     public static String[] splitByCommas(String text) {
         return text.split(",");
     }
 
+    // Exercise 22
+    public static void printRandomColors() {
+        Random random = new Random();
+        String[] posibleColors =
+        {WHITE_COLOR, BLACK_COLOR, RED_COLOR, BLUE_COLOR, YELLOW_COLOR, GREEN_COLOR, MAGENTA_COLOR};
+        System.out.println(RESET + BOLD + UNDERLINE + "Random colors");
+        for(int i = 0; i < 50; i++) {
+            int randomColorIndex = random.nextInt(7);
+            System.out.print(RESET + posibleColors[randomColorIndex] + SINGLE_BLOCK);
+        }
+    }
+
+    // Exercise 23
+    public static void createTreeWithLoopsPainted() {
+        int columns = 6;
+        int maxRowSize = 20;
+        int asteriskCount = 2;
+        boolean firstLine = true;
+        String bottomLine = "";
+        for(int index = 0; index < columns; index++) {
+            String currentLine = "";
+            int currentSpaces = maxRowSize - asteriskCount;
+            currentSpaces /= 2;
+            for(int subIndex = 0; subIndex < currentSpaces; subIndex++) {
+                currentLine += (WHITE_COLOR + " " + RESET);
+            }
+            for(int subIndex2 = 0; subIndex2 < asteriskCount; subIndex2++) {
+                currentLine += (GREEN_COLOR + "*" + RESET);
+            }
+            for(int subIndex = 0; subIndex < currentSpaces; subIndex++) {
+                currentLine += (WHITE_COLOR + " " + RESET);
+            }
+            System.out.print(currentLine);
+            if(firstLine) {
+                bottomLine = currentLine;
+            }
+            firstLine = false;
+            System.out.print("\n");
+            asteriskCount += 2;
+        }
+        for(int i = 0; i < 2; i++) {
+            System.out.println(RESET + BLACK_COLOR + bottomLine);
+        }
+    }
+
+    // Exercise 24
+    public static void typeOfValueTable() {
+        System.out.println("[" + BOLD + "BYTE" + RESET + "]-------------------");
+        System.out.println(BOLD + "Byte count" + RESET + ": 1 Byte / 8 Bits");
+        System.out.println(BOLD + "Range" + RESET + ": -128 to 127");
+    }
+
+    // Exercise 25
+    /* 1:
+    *  You can obtain the class using: ((Object) variableName).getClass();
+    *  You can only obtain the class of the types that are not primitive values, like int.
+    *  EXAMPLES:
+    *   int primitiveInt = 42;
+    *   Integer wrappedInt = Integer.valueOf(primitiveInt);
+    *
+    *   Integer wrappedInt = Integer.valueOf(42);
+    *   int primitiveInt = wrappedInt.intValue();
+    */
+    public static void displayType(Object param) {
+        if (param.getClass().isPrimitive()) {
+            System.out.println(param.getClass().getName() + " (primitive)");
+        } else {
+            System.out.println(param.getClass().getName());
+        }
+    }
+
+    // Exercise 26
+    public static void conversions() {
+        // 1:
+        double doubleValue = 123.456;
+
+        float floatValue = (float) doubleValue;
+        long longValue = (long) floatValue;
+        int intValue = (int) longValue;
+        short shortValue = (short) intValue;
+        byte byteValue = (byte) shortValue;
+
+        // 2:
+        byte byteValue2 = 100;
+        short shortValue2 = (short) byteValue2;
+        int intValue2 = (int) shortValue2;
+        long longValue2 = (long) intValue2;
+        float floatValue2 = (float) longValue2;
+        double doubleValue2 = (double) floatValue2;
+
+        /* 3:
+        *  If we have a byte bigger than 127 it will crash, we need to change the
+        *  variable type to ensure that the value is lower than the type max. In
+        *  this change we can change it to short.
+        * */
+    }
+
+    // Exercise 27
+    public static void printfUsage() {
+        String name = "NAME", surname1 = "SURNAME1", surname2 = "SURNAME2";
+        System.out.printf("%-10s %-10s %-10s%n", name, surname1, surname2);
+        System.out.printf("%-10s %s%s%n", name, surname1, surname2);
+        System.out.printf("%3$s %2$s %1$s%n", name, surname1, surname2);
+        System.out.printf("%10s%n","22");
+        System.out.printf("%010d%n",22);
+        System.out.printf("%010.2f%n",17.1829327);
+        System.out.printf("%s\r%s%s%n","This is a","Hello","World");
+    }
+
+    // Exercise 28
+    public static void printStudentsTable() {
+        System.out.printf("%-15s%-15s%-15s%-15s%n", "Name", "Surnames", "Class", "Birth Year");
+        System.out.println("-----------------------------------------------------------");
+        String[] names = {"Mounir", "Albert", "Ivan", "Luciano"};
+        String[] surnames = {"Jhonson", "Castineira", "Martinez", "Brown"};
+        String[] classes = {"Java1", "Java3", "Java2", "Java5"};
+        int[] birthYears = {2000, 2001, 2002, 2003};
+        for (int i = 0; i < 4; i++) {
+            System.out.printf("%-15s%-15s%-15s%-15d%n", names[i], surnames[i], classes[i], birthYears[i]);
+        }
+    }
+
+    /* Exercise 29 code on package main
+    *  We can import methods using: import com.actions.HelloWorld;
+    *  Or we can import all actions using: import com.actions.*;
+    */
+
+    // Exercise 30
+    public static void iterationUsingRecursion() {
+        // 1:
+        String[] technologies = {"Markdown", "Regexp", "HTML", "CSS", "JS", "SQL", "Java"};
+        iterateWithRecursion(technologies,0);
+
+        // 2: Will be the same till index reaches HTML index
+
+        // 3:
+        long target = 11235813213455L;
+        long a = 0, b = 1;
+        int n = 0;
+        fibonacciRecursive(a, b, n, target);
+
+        // 4:
+        System.out.println(reverseWord("supercalifrasticolisticoespialidoso"));
+
+        // 5:
+        System.out.println(sumDigitsFromNumber(328495908));
+    }
+
+    public static void iterateWithRecursion(String[] array, int index) {
+        if (index >= array.length) {
+            return;
+        }
+        System.out.println(array[index]);
+        iterateWithRecursion(array,index+1);
+    }
+
+    public static void fibonacciRecursive(long a, long b, int n, long target) {
+        if (a > target) {
+            return;
+        }
+        System.out.println("F(" + n + ") = " + a);
+        fibonacciRecursive(b, a + b, n + 1, target);
+    }
+
+    public static String reverseWord(String word) {
+        if (word.length() <= 1) {
+            return word;
+        } else {
+            char firstChar = word.charAt(0);
+            char lastChar = word.charAt(word.length() - 1);
+            String middle = word.substring(1, word.length() - 1);
+            String reversedMiddle = reverseWord(middle);
+            return lastChar + reversedMiddle + firstChar;
+        }
+    }
+
+    public static int sumDigitsFromNumber(int number) {
+        if (number < 10) {
+            return number;
+        } else {
+            int lastDigit = number % 10;
+            int remainingDigits = number / 10;
+            return lastDigit + sumDigitsFromNumber(remainingDigits);
+        }
+    }
 
 }
