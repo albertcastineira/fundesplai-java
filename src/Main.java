@@ -615,4 +615,187 @@ public class Main {
         }
     }
 
+    // Exercise 31
+    public class Car {
+        private int fuel;
+        private int maxSpeed;
+
+        Car() {
+            this.fuel = 100;
+            this.maxSpeed = 200;
+        }
+        Car(int fuel, int maxSpeed) {
+            this.fuel = fuel;
+            this.maxSpeed = maxSpeed;
+        }
+
+        public int getFuel() {
+            return this.fuel;
+        }
+
+        public void setFuel(int fuel) {
+            this.fuel = fuel;
+        }
+
+        public int getMaxSpeed() {
+            return this.maxSpeed;
+        }
+
+        public void setMaxSpeed(int maxSpeed) {
+            this.maxSpeed = maxSpeed;
+        }
+
+        public void refuel(int fuel) {
+            setFuel(fuel);
+        }
+
+        public void drive() {
+            System.out.println("Driving!");
+        }
+    }
+    Car car1 = new Car();
+    Car car2 = new Car(150,300);
+    Car car3 = new Car(130,150);
+
+    // Exercise 32
+    public class CreditCard {
+        private double balance;
+
+        CreditCard() {
+            setBalance(1000.00);
+        }
+
+        private void setBalance(double balance) {
+            this.balance = balance;
+        }
+
+        private double getBalance() {
+            return this.balance;
+        }
+
+        private void payTo(String bankAccount, double balance) {
+            if(balance <= this.balance) {
+                setBalance(this.balance - balance);
+            } else {
+                System.out.println("Insufficient balance");
+            }
+        }
+
+        // Exercise 33
+        public class Employee {
+            float salary;
+
+        }
+
+        public class Programmer extends Employee {
+            int bonus;
+
+            public float getSalary() {
+                return this.salary;
+            }
+
+            public void setSalary(float salary) {
+                this.salary = salary;
+            }
+
+            public float getBonus() {
+                return this.bonus;
+            }
+
+            public void setBonus(int bonus) {
+                this.bonus = bonus;
+            }
+        }
+
+        // Exercise 34
+        public class Person {
+            private String name;
+            private String surnames;
+            private String id;
+            private String type;
+        }
+
+        public class Client extends Person {
+            private String category;
+            private String code;
+
+            private void generateCode() {
+                // Code
+            }
+        }
+
+        public class Employee2 extends Person {
+            private String contractType;
+            private double salary;
+
+            private double calculateSalary() {
+                return salary * 12;
+            }
+        }
+
+        // Exercise 35
+        public class BasicEmployee {
+            private String name;
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
+            @Override
+            public String toString() {
+                return name;
+            }
+        }
+
+        public class Worker extends BasicEmployee {
+            private String location;
+            public String getLocation() {
+                return location;
+            }
+
+            public void setLocation(String location) {
+                this.location = location;
+            }
+        }
+
+        public class Executive extends BasicEmployee {
+            private String room;
+            public String getRoom() {
+                return room;
+            }
+
+            public void setRoom(String room) {
+                this.room = room;
+            }
+        }
+
+        public class Officer extends Executive {
+            private int teamSize;
+            public int getTeamSize() {
+                return teamSize;
+            }
+
+            public void setTeamSize(int teamSize) {
+                this.teamSize = teamSize;
+            }
+        }
+
+        public class Technician extends Executive {
+            private String speciality;
+            public String getSpeciality() {
+                return speciality;
+            }
+
+            public void setSpeciality(String speciality) {
+                this.speciality = speciality;
+            }
+        }
+
+    }
+
+    // Exercise 36
+
 }
