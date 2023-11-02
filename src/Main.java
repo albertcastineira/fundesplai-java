@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Main {
     public static int NUMBER = 0;
@@ -26,9 +27,9 @@ public class Main {
             "white,20,break",
             "blue,20,break"
     };
-
+    public static ArrayList<String> cells = new ArrayList<>();
     public static void main(String[] args) {
-        iterationUsingRecursion();
+        TicTacToe newGame = new TicTacToe();
     }
 
     /* Exercise 1
@@ -797,5 +798,294 @@ public class Main {
     }
 
     // Exercise 36
+    abstract class LivingCreature {
+        public abstract void eat();
+    }
+
+    public class Plant extends LivingCreature {
+        private String commonName;
+
+        @Override
+        public void eat() {
+            System.out.println("Absorb solar light");
+        }
+    }
+
+    public class Animal extends LivingCreature {
+        private String name;
+        @Override
+        public void eat() {
+            System.out.println("Eat food");
+        }
+    }
+
+    public class CarnivorousAnimal extends Animal {
+
+    }
+
+    public class HerbivorousAnimal extends Animal {
+
+    }
+
+    // Exercise 37
+    public interface IPerson {
+        String getName(); // Getter method for name
+        void setName(String name); // Setter method for name
+    }
+
+    public class Teacher implements IPerson{
+        private String name;
+
+        @Override
+        public String getName() {
+            return name;
+        }
+
+        @Override
+        public void setName(String name) {
+            this.name = name;
+        }
+    }
+
+    // Exercise 38
+    public class CarVehicle {
+        private String company;
+        int speed;
+
+        CarVehicle(String company, int speed) {
+            setCompany(company);
+            setSpeed(speed);
+        }
+        public void setCompany(String companyName) {
+            this.company = companyName;
+        }
+        public String getCompany() {
+            return this.company;
+        }
+
+        public void setSpeed(int speed) {
+            this.speed = speed;
+        }
+
+        public void getSpeed() {
+            System.out.println(this.company + " car's speed is " + this.speed + "Km/hr");
+        }
+    }
+
+    private CarVehicle vehicle1 = new CarVehicle("Honda", 100);
+    private CarVehicle vehicle2 = new CarVehicle("Jeep", 500);
+    private CarVehicle vehicle3= new CarVehicle("BMW", 800);
+
+    // Exercise 39
+    public static void doGenericQuestions() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Whats your name?");
+        String name = sc.nextLine();
+        System.out.print("Whats your age? ");
+        int age = sc.nextInt();
+        System.out.println("Whats your las test mark?");
+        double mark = sc.nextDouble();
+        System.out.println("Are you in front of a computer right now?");
+        boolean answer = sc.nextBoolean();
+        sc.close();
+        System.out.println(name + " is " + age + ", his last mark was " + mark + " and the answer is "
+        + answer);
+    }
+
+    // Exercise 40
+    public static class TicTacToe {
+        private String player1 = "X";
+        private String player2 = "O";
+        private String lastPlayerMove = null;
+        private ArrayList<String> cells = new ArrayList<>();
+        private String selectedOption = null;
+        private Scanner sc = new Scanner(System.in);
+
+        TicTacToe() {
+            init();
+        }
+
+        private void init() {
+            for(int i = 0; i < 9; i++) {
+                cells.add(" ");
+            }
+            startGame();
+        }
+
+        private void startGame() {
+            System.out.println("Select one of this options:");
+            System.out.println("1 - Human vs Human");
+            System.out.println("2 - Human vs CPU");
+            System.out.println("3 - CPU vs CPU");
+            System.out.print("Choose one option: ");
+            selectedOption = sc.nextLine();
+            printCells();
+            while (!hasAnyPlayerWon()) {
+                playRound();
+            }
+            System.out.println("---------------------------------------------");
+            System.out.println(">> Winner is Player " + lastPlayerMove + " <<");
+            System.out.println("---------------------------------------------");
+        }
+
+        private boolean hasAnyPlayerWon() {
+            boolean result = false;
+            boolean row1 = areCellsEqual(0,1,2);
+            boolean row2 = areCellsEqual(3,4,5);
+            boolean row3 = areCellsEqual(6,7,8);
+            boolean column1 = areCellsEqual(0,3,6);
+            boolean column2 = areCellsEqual(1,4,7);
+            boolean column3 = areCellsEqual(2,5,8);
+            boolean diagonal1 = areCellsEqual(0,4,8);
+            boolean diagonal2 = areCellsEqual(2,4,6);
+            if(row1 || row2 || row3 || column1 || column2 || column3 || diagonal1 || diagonal2) {
+                result = true;
+            }
+            return result;
+        }
+
+        private boolean areCellsEqual(int index1, int index2, int index3) {
+            boolean result = false;
+            boolean cell1 = isCellFull(index1) && cells.get(index1).equals(cells.get(index2));
+            boolean cell2 = isCellFull(index2) && cells.get(index2).equals(cells.get(index3));
+            boolean cell3 = isCellFull(index3) && cells.get(index3).equals(cells.get(index1));
+            if(cell1 && cell2 && cell3) {
+                result = true;
+            }
+            return result;
+        }
+
+        private boolean isCellFull(int index) {
+            boolean result = false;
+            boolean isEmpty = cells.get(index).equals(" ");
+            boolean hasPlayerValue = cells.get(index).equals("X") || cells.get(index).equals("O");
+            if(!isEmpty && hasPlayerValue) {
+                result = true;
+            }
+            return result;
+        }
+
+        private void playRound() {
+            System.out.println("Write your (X,Y) move: ");
+
+            if(!hasAnyPlayerWon()) {
+                if(selectedOption.equals("3")) {
+                    randomMove(player1);
+                } else {
+                    doMove(player1);
+                }
+                printCells();
+                lastPlayerMove = player1;
+            }
+
+            if(!hasAnyPlayerWon()) {
+                if (selectedOption.equals("2") || selectedOption.equals("3")) {
+                    randomMove(player2);
+                } else {
+                    doMove(player2);
+                }
+                printCells();
+                lastPlayerMove = player2;
+            }
+        }
+
+        private void randomMove(String player) {
+            ArrayList<Integer> emptyCellsIndex = new ArrayList<>();
+            for (int index = 0; index < cells.size(); index++) {
+                System.out.println("Cell: " + index + ": " + cells.get(index));
+                if(!isCellFull(index)) {
+                    emptyCellsIndex.add(index);
+                }
+            }
+            Random random = new Random();
+            int randomIndex = random.nextInt(emptyCellsIndex.size());
+            setCellValue(emptyCellsIndex.get(randomIndex), player);
+        }
+
+        private void doMove(String player) {
+            String userMove;
+            boolean moveIsValid = false;
+            while(!moveIsValid) {
+                System.out.print("Player " + player + " move: ");
+                userMove = sc.nextLine();
+                if(getCellIndexFromCoords(userMove) != -1) {
+                    moveIsValid = setCellValue(getCellIndexFromCoords(userMove), player);
+                } else {
+                    System.out.println("Invalid move!");
+                }
+            }
+        }
+
+        private boolean setCellValue(int index, String value) {
+            boolean result = false;
+            if(!isCellFull(index)) {
+                cells.set(index,value);
+                result = true;
+            } else {
+                System.out.println("--------------------------------");
+                System.out.println(">> This cell is already full! <<");
+                System.out.println("--------------------------------");
+            }
+            return result;
+        }
+
+        private int getCellIndexFromCoords(String coords) {
+            int index;
+            switch (coords) {
+                case "A1":
+                    index = 0;
+                    break;
+                case "A2":
+                    index = 1;
+                    break;
+                case "A3":
+                    index = 2;
+                    break;
+                case "B1":
+                    index = 3;
+                    break;
+                case "B2":
+                    index = 4;
+                    break;
+                case "B3":
+                    index = 5;
+                    break;
+                case "C1":
+                    index = 6;
+                    break;
+                case "C2":
+                    index = 7;
+                    break;
+                case "C3":
+                    index = 8;
+                    break;
+                default:
+                    index = -1;
+            }
+            return index;
+        }
+
+        private void printCells() {
+            System.out.println("\n    1   2   3  ");
+            System.out.println("  + - + - + - +");
+            System.out.println(
+                "A | " + cells.get(0) + " | " +  cells.get(1) + " | " +  cells.get(2) + " | "
+            );
+            System.out.println("  + - + - + - +");
+            System.out.println(
+                    "B | " + cells.get(3) + " | " +  cells.get(4) + " | " +  cells.get(5) + " | "
+            );
+            System.out.println("  + - + - + - +");
+            System.out.println(
+                    "C | " + cells.get(6) + " | " +  cells.get(7) + " | " +  cells.get(8) + " | "
+            );
+            System.out.println("  + - + - + - +");
+        }
+
+
+    }
+
+
+
 
 }
