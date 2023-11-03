@@ -1,9 +1,12 @@
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
+    private static final Main main = new Main();
+    private static Connection connection;
     public static int NUMBER = 0;
     public static String WHITE_COLOR = "\u001B[47m";
     public static String BLACK_COLOR = "\u001B[30m";
@@ -29,7 +32,8 @@ public class Main {
     };
     public static ArrayList<String> cells = new ArrayList<>();
     public static void main(String[] args) {
-        TicTacToe newGame = new TicTacToe();
+
+        main.crudDatabase();
     }
 
     /* Exercise 1
@@ -42,12 +46,12 @@ public class Main {
 
 
     // Exercise 2
-    public static void iLoveJava() {
+    public void iLoveJava() {
         System.out.println("I <3 Java");
     }
 
     // Exercise 3
-    public static void scapeSequences() {
+    public void scapeSequences() {
         System.out.println("Hey I'm Albert \nHow are you today?");
         System.out.println("These \t are \t tabbed \t words ");
         System.out.println("This is a slash \\ ");
@@ -58,7 +62,7 @@ public class Main {
     }
 
     // Exercise 4
-    public static void explainAlgorithm() {
+    public void explainAlgorithm() {
         int num1 = 10; // Number 1 value
         int num2 = 20; // Number 2 value
         int sum = num1 + num2; // Sum of Number 1 & 2
@@ -66,7 +70,7 @@ public class Main {
     }
 
     // Exercise 5
-    public static void typesOfValues() {
+    public void typesOfValues() {
         // Logic
         boolean isRed = false;
         System.out.println(isRed);
@@ -89,7 +93,7 @@ public class Main {
     }
 
     // Exercise 6
-    public static void circularNumbers() {
+    public void circularNumbers() {
         byte num1 = (byte) 135;
         short num2 = (short) 32792;
         int num3 = (int) 2147484647L;
@@ -97,13 +101,13 @@ public class Main {
     }
 
     // Exercise 7
-    public static final byte NUM1 = (byte) 135;
-    public static final short NUM2 = (short) 32792;
-    public static final int NUM3 = (int) 2147484647L;
-    public static final long NUM4 = (long) 9223372036854795807f;
+    public final byte NUM1 = (byte) 135;
+    public final short NUM2 = (short) 32792;
+    public final int NUM3 = (int) 2147484647L;
+    public final long NUM4 = (long) 9223372036854795807f;
 
     // Exercise 8
-    public static void personalData() {
+    public void personalData() {
         String
             name = "Albert",
             surnames = "Castiñeira Aranda",
@@ -118,7 +122,7 @@ public class Main {
     }
 
     // Exercise 9
-    public static void operations() {
+    public void operations() {
         int num1 = 10 - 5;
         int num2 = 55 + 45;
         int num3 = -3;
@@ -129,16 +133,16 @@ public class Main {
     }
 
     // Exercise 10
-    public static void increaseNumber() {
+    public void increaseNumber() {
         NUMBER ++;
     }
 
-    public static void decreaseNumber() {
+    public void decreaseNumber() {
         NUMBER -= 2;
     }
 
     // Exercise 11
-    public static void combinedOperations() {
+    public void combinedOperations() {
         int number = 25;
         number += 25;
         number -= 15;
@@ -149,7 +153,7 @@ public class Main {
     }
 
     // Exercise 12
-    public static void logicOperators() {
+    public void logicOperators() {
         int num1 = 1, num2 = 2, num3 = 3, num4 = 2;
         System.out.println((num4 == num2));
         System.out.println((num2 == num3));
@@ -169,18 +173,18 @@ public class Main {
     }
 
     // Exercise 13
-    public static void logicOperators2() {
+    public void logicOperators2() {
         boolean bool1 = true, bool2 = false, bool3 = false;
         System.out.println(bool1 == !bool2);
         System.out.println(bool2 == !bool3);
     }
 
     // Exercise 14
-    public static boolean isOdd(int number) {
+    public boolean isOdd(int number) {
         return number % 2 == 0;
     }
 
-    public static void printWhiteOrBlack() {
+    public void printWhiteOrBlack() {
         Random random = new Random();
         int randomNumber = random.nextInt(100);
         if(randomNumber <= 50) {
@@ -191,7 +195,7 @@ public class Main {
     }
 
     // Exercise 15
-    public static void printRedOrBlack() {
+    public void printRedOrBlack() {
         double randomValue = Math.round(Math.random());
         if(randomValue == 0) {
             System.out.println("Red");
@@ -200,7 +204,7 @@ public class Main {
         }
     }
 
-    public static void getClimateDetails(double temperature) {
+    public void getClimateDetails(double temperature) {
         String climateType = "", specificClimateRegion = "";
         if(temperature < 10) {
             climateType = "Cold climate";
@@ -232,7 +236,7 @@ public class Main {
     }
 
     // Exercise 16
-    public static void numberToWord(int number) {
+    public void numberToWord(int number) {
         switch (number) {
             case 1:
                 System.out.println("One");
@@ -264,12 +268,12 @@ public class Main {
         }
     }
 
-    public static boolean isPositive(int number) {
+    public boolean isPositive(int number) {
         return (number >= 0);
     }
 
     // Exercise 17
-    public static void createTreeWithLoops() {
+    public void createTreeWithLoops() {
         int columns = 6;
         int maxRowSize = 20;
         int asteriskCount = 2;
@@ -302,7 +306,7 @@ public class Main {
     }
 
     // Exercise 18
-    public static ArrayList<Integer> getOddNumbers(int[] numbers) {
+    public ArrayList<Integer> getOddNumbers(int[] numbers) {
         ArrayList<Integer> oddNumbers = new ArrayList<>();
         for(int i = 0; i < numbers.length; i++) {
             if(numbers[i] % 2 == 0) {
@@ -312,7 +316,7 @@ public class Main {
         return oddNumbers;
     }
 
-    public static ArrayList<Integer> getMultiplesOf3(int[] numbers) {
+    public ArrayList<Integer> getMultiplesOf3(int[] numbers) {
         ArrayList<Integer> oddNumbers = new ArrayList<>();
         for(int i = 0; i < numbers.length; i++) {
             if(numbers[i] % 3 == 0) {
@@ -322,7 +326,7 @@ public class Main {
         return oddNumbers;
     }
 
-    public static void greetMultipleTimes(int times) {
+    public void greetMultipleTimes(int times) {
         int index = 0;
         do {
             System.out.println("Hello!");
@@ -330,7 +334,7 @@ public class Main {
         } while (index < times);
     }
 
-    public static void reverseAlphabet() {
+    public void reverseAlphabet() {
         String reverseAlphabet = "ZYXWVTSRQPONMLKJIHGFEDCBA";
         int alphabetSize = reverseAlphabet.length();
         ArrayList<String> removedLetters = new ArrayList<>();
@@ -350,7 +354,7 @@ public class Main {
     }
 
     // Exercise 19
-    public static void exitAtThirdIteration() {
+    public void exitAtThirdIteration() {
         int index = 0;
         while(index < 3) {
             index++;
@@ -358,7 +362,7 @@ public class Main {
     }
 
     // Exercise 20
-    public static String javaOrNull(String param) {
+    public String javaOrNull(String param) {
         if(param == "java") {
             return param;
         } else {
@@ -366,11 +370,11 @@ public class Main {
         }
     }
 
-    public static boolean login(String user, String password) {
+    public boolean login(String user, String password) {
         return (user == "admin" && password == "1234");
     }
 
-    public static boolean randomOddOrEven() {
+    public boolean randomOddOrEven() {
         Random random = new Random();
         int min = 1;
         int max = 100;
@@ -379,7 +383,7 @@ public class Main {
     }
 
     // Exercise 21
-    public static void drawFlag(String flagName, String[] colorDigitBreak) {
+    public void drawFlag(String flagName, String[] colorDigitBreak) {
 
 
         int maxCharWidth = 18;
@@ -425,12 +429,12 @@ public class Main {
         System.out.println(RESET + BOLD + UNDERLINE + flagName);
     }
 
-    public static String[] splitByCommas(String text) {
+    public String[] splitByCommas(String text) {
         return text.split(",");
     }
 
     // Exercise 22
-    public static void printRandomColors() {
+    public void printRandomColors() {
         Random random = new Random();
         String[] posibleColors =
         {WHITE_COLOR, BLACK_COLOR, RED_COLOR, BLUE_COLOR, YELLOW_COLOR, GREEN_COLOR, MAGENTA_COLOR};
@@ -442,7 +446,7 @@ public class Main {
     }
 
     // Exercise 23
-    public static void createTreeWithLoopsPainted() {
+    public void createTreeWithLoopsPainted() {
         int columns = 6;
         int maxRowSize = 20;
         int asteriskCount = 2;
@@ -475,7 +479,7 @@ public class Main {
     }
 
     // Exercise 24
-    public static void typeOfValueTable() {
+    public void typeOfValueTable() {
         System.out.println("[" + BOLD + "BYTE" + RESET + "]-------------------");
         System.out.println(BOLD + "Byte count" + RESET + ": 1 Byte / 8 Bits");
         System.out.println(BOLD + "Range" + RESET + ": -128 to 127");
@@ -492,7 +496,7 @@ public class Main {
     *   Integer wrappedInt = Integer.valueOf(42);
     *   int primitiveInt = wrappedInt.intValue();
     */
-    public static void displayType(Object param) {
+    public void displayType(Object param) {
         if (param.getClass().isPrimitive()) {
             System.out.println(param.getClass().getName() + " (primitive)");
         } else {
@@ -501,7 +505,7 @@ public class Main {
     }
 
     // Exercise 26
-    public static void conversions() {
+    public void conversions() {
         // 1:
         double doubleValue = 123.456;
 
@@ -527,7 +531,7 @@ public class Main {
     }
 
     // Exercise 27
-    public static void printfUsage() {
+    public void printfUsage() {
         String name = "NAME", surname1 = "SURNAME1", surname2 = "SURNAME2";
         System.out.printf("%-10s %-10s %-10s%n", name, surname1, surname2);
         System.out.printf("%-10s %s%s%n", name, surname1, surname2);
@@ -539,7 +543,7 @@ public class Main {
     }
 
     // Exercise 28
-    public static void printStudentsTable() {
+    public void printStudentsTable() {
         System.out.printf("%-15s%-15s%-15s%-15s%n", "Name", "Surnames", "Class", "Birth Year");
         System.out.println("-----------------------------------------------------------");
         String[] names = {"Mounir", "Albert", "Ivan", "Luciano"};
@@ -558,7 +562,7 @@ public class Main {
     */
 
     // Exercise 30
-    public static void iterationUsingRecursion() {
+    public void iterationUsingRecursion() {
         // 1:
         String[] technologies = {"Markdown", "Regexp", "HTML", "CSS", "JS", "SQL", "Java"};
         iterateWithRecursion(technologies,0);
@@ -578,7 +582,7 @@ public class Main {
         System.out.println(sumDigitsFromNumber(328495908));
     }
 
-    public static void iterateWithRecursion(String[] array, int index) {
+    public void iterateWithRecursion(String[] array, int index) {
         if (index >= array.length) {
             return;
         }
@@ -586,7 +590,7 @@ public class Main {
         iterateWithRecursion(array,index+1);
     }
 
-    public static void fibonacciRecursive(long a, long b, int n, long target) {
+    public void fibonacciRecursive(long a, long b, int n, long target) {
         if (a > target) {
             return;
         }
@@ -594,7 +598,7 @@ public class Main {
         fibonacciRecursive(b, a + b, n + 1, target);
     }
 
-    public static String reverseWord(String word) {
+    public String reverseWord(String word) {
         if (word.length() <= 1) {
             return word;
         } else {
@@ -606,7 +610,7 @@ public class Main {
         }
     }
 
-    public static int sumDigitsFromNumber(int number) {
+    public int sumDigitsFromNumber(int number) {
         if (number < 10) {
             return number;
         } else {
@@ -877,7 +881,7 @@ public class Main {
     private CarVehicle vehicle3= new CarVehicle("BMW", 800);
 
     // Exercise 39
-    public static void doGenericQuestions() {
+    public void doGenericQuestions() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Whats your name?");
         String name = sc.nextLine();
@@ -893,7 +897,7 @@ public class Main {
     }
 
     // Exercise 40
-    public static class TicTacToe {
+    public class TicTacToe {
         private String player1 = "X";
         private String player2 = "O";
         private String lastPlayerMove = null;
@@ -1085,7 +1089,221 @@ public class Main {
 
     }
 
+    // Exercise 41
+    public void doGenericQuestionsProtected() {
+        int age = 0;
+        double mark = 0;
+        boolean answer = false;
+        String errorMessage = "Error: ";
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Whats your name?");
+        String name = sc.nextLine();
+        System.out.print("Whats your age? ");
+        try {
+            age = sc.nextInt();
+        } catch (Exception e) {
+            System.out.println(errorMessage + e);
+        }
+        System.out.println("Whats your las test mark?");
+        try {
+            mark = sc.nextDouble();
+        } catch(Exception e) {
+            System.out.println(errorMessage + e);
+        }
+        System.out.println("Are you in front of a computer right now?");
+        try {
+            answer = sc.nextBoolean();
+        } catch(Exception e) {
+            System.out.println(errorMessage + e);
+        }
+        sc.close();
+        try {
+            System.out.println(name + " is " + age + ", his last mark was " + mark + " and the answer is "
+                    + answer);
+        } catch (Exception e) {
+            System.out.println("Something went wrong! Error: " + e);
+        }
+
+    }
+
+    // Exercise 42
+    // Code is on the package exercise.federicoGarciaLorca
+
+    // Exercise 43
+    enum Job {
+        BACKEND("Back End Developer"),
+        FRONTEND("Front End Developer"),
+        FULLSTACK("Full Stack Developer");
+        private String jobName;
+
+        Job(String jobName) {
+            this.jobName = jobName;
+        }
+
+        public String getJobName() {
+            return this.jobName;
+        }
+    }
+    public class Developer {
+        private String name, surnames, id, role;
+        private int age;
+
+        Developer(String name, String surnames, String id, Job role, int age) {
+            setName(name);
+            setSurnames(surnames);
+            setId(id);
+            setRole(role);
+            setAge(age);
+        }
+
+        private void setName(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return this.name;
+        }
+
+        private void setSurnames(String surnames) {
+            this.surnames = surnames;
+        }
+
+        public String getSurnames() {
+            return this.surnames;
+        }
+
+        private void setId(String id) {
+            this.id = id;
+        }
+
+        public String getId() {
+            return this.name;
+        }
+
+        private void setAge(int age) {
+            this.age = age;
+        }
+
+        public int getAge() {
+            return this.age;
+        }
+
+        private void setRole(Job job) {
+            this.role = job.getJobName();
+        }
+    }
+
+    Developer dev1 = new Developer("John", "Gonzalez","3409332340A",Job.BACKEND,23);
+    Developer dev2 = new Developer("Anna", "Garcia","3409583480F",Job.FRONTEND,27);
+    Developer dev3 = new Developer("Jessica", "Lexa","335583480D",Job.FULLSTACK,29);
+
+    // Exercise 44
+    private void crudDatabase() {
+        final String dbUrl = "jdbc:mysql://localhost:3306/";
+        final String user = "root";
+        final String password = "admin";
+        final String tableName = "employee";
+        connection = databaseConnection(dbUrl,user,password);
+        selectAllFromDB(tableName);
+        //insertEmployeeIntoTable(tableName, 2, "Albert", "Castiñeira Aranda", "Spain");
+        editEmployeFromTable(tableName, 2, "Albert", "Fernandez", "Spain");
+        selectAllFromDB(tableName);
+        deleteEmployeeFromTable(2);
+    }
+
+    private Connection databaseConnection(String dbUrl, String user, String password) {
+        Connection connection = null;
+        try {
+            connection = DriverManager.getConnection(dbUrl,user,password);
+            System.out.println("[SQL CONNECTION] OK");
+        } catch (Exception e) {
+            System.out.println("[SQL CONNECTION] EXCEPTION => " + e);
+        }
+        return connection;
+    }
+    private void selectAllFromDB(String tableName) {
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery("SELECT * FROM java_testing." + tableName);
+            ResultSetMetaData resultMetadata = result.getMetaData();
+            System.out.println("Table: " + tableName);
+            for(int i = 1; i < resultMetadata.getColumnCount(); i++) {
+                String columnName = resultMetadata.getColumnName(i).toString();
+                System.out.printf("%15s", columnName);
+            }
+            int spacing = ((resultMetadata.getColumnCount() * 10) - 5);
+            String formattedText = String.format("%n%" + spacing + "s", " ", " ").replace(" ","-");
+            System.out.println(formattedText);
+            while (result.next()) {
+                int id = result.getInt("id");
+                String name = result.getString("name");
+                String surnames = result.getString("surnames");
+                String location = result.getString("location");
+                System.out.printf("%n%15d%15s%15s%15s", id, name, surnames, location);
+            }
+            result.close();
+            statement.close();
+        } catch (Exception e) {
+            System.out.println("[SQL SELECT] EXCEPTION => " + e);
+        }
 
 
+    }
 
+    private void insertEmployeeIntoTable(String tableName, int id, String name, String surnames, String location) {
+        String query =
+        "INSERT INTO java_testing." + tableName + " (id, name, surnames, location) VALUES (?, ?, ?, ?)";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, id);
+            preparedStatement.setString(2, name);
+            preparedStatement.setString(3, surnames);
+            preparedStatement.setString(4, location);
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows > 0) {
+                System.out.println("[SQL INSERT] New employee inserted");
+            } else {
+                System.out.println("[SQL INSERT] Insertion failed ");
+            }
+        } catch(Exception e) {
+            System.out.println("[SQL INSERT] Exception " + e);
+        }
+    }
+    private void editEmployeFromTable(String tableName, int id, String name, String surnames, String location) {
+        String query =
+            "UPDATE java_testing." + tableName + " SET name = ?, surnames = ?, location = ? WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(2, name);
+            preparedStatement.setString(3, surnames);
+            preparedStatement.setString(4, location);
+            preparedStatement.setInt(1, id);
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows > 0) {
+                System.out.println("[SQL UPDATE] New employee inserted");
+            } else {
+                System.out.println("[SQL UPDATE] Insertion failed ");
+            }
+        } catch(Exception e) {
+            System.out.println("[SQL INSERT] Exception " + e);
+        }
+    }
+    private void deleteEmployeeFromTable(int id) {
+        String query =
+                "DELETE FROM users WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, id);
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows > 0) {
+                System.out.println("[SQL UPDATE] New employee inserted");
+            } else {
+                System.out.println("[SQL UPDATE] Insertion failed ");
+            }
+        } catch(Exception e) {
+            System.out.println("[SQL INSERT] Exception " + e);
+        }
+    }
+
+    // Exercise 45
 }

@@ -5,4 +5,8 @@ public class Main {
         HelloWorld helloWorld = new HelloWorld();
         helloWorld.greetings();
     }
+
+    public String saludar(){
+        return "Hi";
+    }
 }
