@@ -1,3 +1,5 @@
+import javax.swing.*;
+import java.awt.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,8 +34,7 @@ public class Main {
     };
     public static ArrayList<String> cells = new ArrayList<>();
     public static void main(String[] args) {
-
-        main.crudDatabase();
+        main.buttonsDialog();
     }
 
     /* Exercise 1
@@ -1306,4 +1307,161 @@ public class Main {
     }
 
     // Exercise 45
+    private void showMessageIVA(){
+        JOptionPane.showMessageDialog(null,
+                "The total is:\n\t\t 120€ (IVA 10% not incl.)\n\t\t 132€ (with IVA incl.)");
+    }
+
+    // Exercise 46
+    private void showWarningMessage() {
+        String name = JOptionPane.showInputDialog("Whats your name? ");
+        System.out.println("Name: " + name);
+        if(name.equals("Albert")) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    name,
+                    "Name",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+        } else {
+            JOptionPane.showMessageDialog(
+                    null,
+                    name,
+                    "Name",
+                    JOptionPane.WARNING_MESSAGE
+            );
+        }
+    }
+
+    // Exercise 47
+    private void chooseDialogType() {
+        String option = JOptionPane.showInputDialog(
+                "Choose an icon: \n -1: NONE \n 0: ERROR \n 1: INFO \n 2: WARNING \n 3: QUESTION"
+        );
+        int type = Integer.parseInt(option);
+        JOptionPane.showMessageDialog(
+                null,
+                "This is a custom icon represented by a number.",
+                "Custom Icon",
+                type
+        );
+    }
+
+    // Exercise 48
+    private void showInputSelectDialog() {
+        String[] options = {"Option 1", "Option 2", "Option 3"};
+        String selectedOption = (String) JOptionPane.showInputDialog(
+                null,
+                "Select an option:",
+                "Select Option",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0] // Default selection
+        );
+
+        if (selectedOption != null) {
+            System.out.println("Selected option: " + selectedOption);
+        } else {
+            System.out.println("No option selected.");
+        }
+    }
+
+    // Exercise 49
+    private void showCustomDialog() {
+        ImageIcon customIcon = new ImageIcon("src/pizza.jpg");
+        Image customImage = customIcon.getImage();
+        int width = 100;
+        int height = 100;
+        Image resizedImage = customImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        ImageIcon resizedIcon = new ImageIcon(resizedImage);
+
+        String title = "Questions about food";
+        String question = "Do you like pizza with pineapple?";
+        String[] options = {"I love it", "I hate it!", "I prefer a cheese one","Next","Exit"};
+        int selectedOption = JOptionPane.showOptionDialog(
+                null,
+                question,
+                title,
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.PLAIN_MESSAGE,
+                resizedIcon,
+                options,
+                options[0]
+        );
+    }
+
+    // Exercise 50
+    private void showFundesplaiWindow() {
+        String title = "Fundesplai Esplai";
+        ImageIcon customIcon = new ImageIcon("src/fundesplai.png");
+        JDialog customDialog = new JDialog();
+        customDialog.setTitle(title);
+        customDialog.setResizable(false);
+        customDialog.setIconImage(customIcon.getImage());
+        JPanel contentPanel = new JPanel();
+        contentPanel.setBackground(Color.BLUE);
+        customDialog.add(contentPanel);
+        customDialog.setSize(800, 600);
+        customDialog.setLocationRelativeTo(null);
+        customDialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        customDialog.setVisible(true);
+    }
+
+    // Exercise 51
+    private void showBorderLayout() {
+        JFrame frame = new JFrame("BorderLayout");
+        frame.setLayout(new BorderLayout());
+
+        JButton northButton = new JButton("North");
+        JButton southButton = new JButton("South");
+        JButton eastButton = new JButton("East");
+        JButton westButton = new JButton("West");
+        JButton centerButton = new JButton("Center");
+
+        frame.add(northButton, BorderLayout.NORTH);
+        frame.add(southButton, BorderLayout.SOUTH);
+        frame.add(eastButton, BorderLayout.EAST);
+        frame.add(westButton, BorderLayout.WEST);
+        frame.add(centerButton, BorderLayout.CENTER);
+
+        frame.setSize(400, 300);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        frame.setVisible(true);
+    }
+
+    // Exercise 52
+    private void flowLayoutDialog() {
+        JFrame frame = new JFrame("FlowLayout Example");
+
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        frame.setContentPane(panel);
+
+        panel.add(new JButton("Button 1"));
+        panel.add(new JButton("Button 2"));
+        panel.add(new JButton("Button 3"));
+
+        frame.setSize(400, 100);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        frame.setVisible(true);
+    }
+
+    // Exercise 53
+    private void buttonsDialog() {
+        JFrame frame = new JFrame("3x3 Button Grid");
+
+        JPanel panel = new JPanel(new GridLayout(3, 3));
+        frame.setContentPane(panel);
+
+        for (int i = 1; i <= 9; i++) {
+            JButton button = new JButton("Button " + i);
+            panel.add(button);
+        }
+
+        frame.setSize(300, 300);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+    }
 }
