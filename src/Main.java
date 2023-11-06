@@ -1,5 +1,9 @@
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.text.DefaultCaret;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,7 +38,7 @@ public class Main {
     };
     public static ArrayList<String> cells = new ArrayList<>();
     public static void main(String[] args) {
-        main.buttonsDialog();
+        BattleShip newGame = new BattleShip();
     }
 
     /* Exercise 1
@@ -1464,4 +1468,278 @@ public class Main {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
     }
+
+    // Exercise 54
+    static class BattleShip {
+
+        private final int cellNumber = 50;
+        private ArrayList<String> shipList = new ArrayList<>();
+        private int shipCount = 0;
+        private final int shipCountEasy = 5;
+        private final int shipCountMedium = 4;
+        private final int shipCountDifficult = 3;
+        private int turnCount = 0;
+        private Scanner sc = new Scanner(System.in);
+        private JFrame frame = new JFrame("BattleShip");
+        private JTextArea textArea = new JTextArea(10, 30);
+        private Color waterColor = new Color(173, 216, 230);
+
+        // Mesures
+        private final int topLeftCorner_cell = 0;
+        private final int topRightCorner_cell = 9;
+        private final int bottomLeftCorner_cell = 40;
+        private final int bottomRightCorner_cell = 49;
+
+        BattleShip() {
+            setup();
+        }
+
+        private void setup() {
+            for(int i = 0; i < cellNumber; i++) {
+                shipList.add(" ");
+            }
+            buildWindow();
+            generateShips();
+            printGameStartMessage();
+        }
+
+        private void buildWindow() {
+            JPanel topPanel = new JPanel(new GridLayout(5, 5));
+            Dimension buttonSize = new Dimension(50, 50); // Adjust the size as needed
+
+            for (int i = 1; i <= cellNumber; i++) {
+                JButton button = new JButton("");
+                button.setPreferredSize(buttonSize);
+
+                int index = i - 1;
+                button.setBackground(waterColor);
+                button.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        incrementTurnCount();
+                        printTurn(getCellValue(index));
+                        if(isWater(index)) {
+                            button.setBackground(Color.BLUE);
+                        } else {
+                            button.setBackground(Color.RED);
+                        }
+
+                        button.setEnabled(false);
+
+                    }
+                });
+
+                topPanel.add(button);
+            }
+            textArea.setEditable(false);
+            Insets padding = new Insets(10, 10, 20, 10);
+            textArea.setBorder(new EmptyBorder(padding));
+            textArea.setWrapStyleWord(true);
+            textArea.setLineWrap(true);
+
+            JScrollPane scrollPane = new JScrollPane(textArea);
+            DefaultCaret caret = (DefaultCaret) textArea.getCaret();
+            caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+
+            frame.setLayout(new BorderLayout());
+            frame.add(topPanel, BorderLayout.NORTH);
+            frame.add(scrollPane, BorderLayout.CENTER);
+
+            frame.setSize(400, 400);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setResizable(false);
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
+            textArea.setBackground(Color.BLACK);
+            textArea.setForeground(Color.WHITE);
+        }
+
+        private void print(String text) {
+            textArea.append("\n"+text);
+        }
+
+        private void printGameStartMessage() {
+            print("Welcome to BattleShip game");
+            print("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+            print("You have to discover where are the hidden ships.");
+            print("There are " + shipCount + " ships. Good luck!");
+        }
+        private void incrementTurnCount() {
+            turnCount++;
+        }
+
+        private void printTurn(String text) {
+            print("--------------------------------");
+            print("[ Turn " + turnCount + " ] " + text);
+        }
+
+        private String getCellValue(int cellIndex) {
+            String cellValue = shipList.get(cellIndex);
+            String result;
+            if(cellValue.equals(" ")) {
+                result = "Water";
+            } else {
+                result = "Ship";
+            }
+            return result;
+        }
+        private Boolean isWater(int cellIndex) {
+            return shipList.get(cellIndex).equals(" ");
+        }
+
+        private void generateShips() {
+            for(int i : getRandomShipCoords(1)) {
+                setShip(new int[]{i});
+            }
+            for(int i : getRandomShipCoords(2)) {
+                setShip(new int[]{i});
+            }
+            for(int i : getRandomShipCoords(3)) {
+                setShip(new int[]{i});
+            }
+        }
+
+        private ArrayList<Integer> getRandomCellsCube() {
+            ArrayList<Integer> cells = new ArrayList<>();
+            Random random = new Random();
+            int randomValue = random.nextInt(27);
+            int result = randomValue + 11;
+            int[] valuesToAdd = {-11, -10, -9, -1, 0, 1, 9, 10, 11};
+
+            for (int i = 0; i < 9; i++) {
+                cells.add(result + valuesToAdd[i]);
+            }
+            return cells;
+        }
+
+        private int getRandomCellIndexFromCube(ArrayList<Integer> cellsCube) {
+            Random random = new Random();
+            int result = 0;
+            boolean validCoords = false;
+            while (!validCoords) {
+                int randomCellIndex = cellsCube.get(random.nextInt(cellsCube.size()));
+
+                if(shipList.get(randomCellIndex).equals("Ship")) {
+                    validCoords = false;
+                } else {
+                    result = randomCellIndex;
+                    validCoords = true;
+                }
+            }
+            return result;
+        }
+        private int[] getRandomCellIndexesFromCube(ArrayList<Integer> cellsCube, int shipLength) {
+            Random random = new Random();
+            ArrayList<int[]> availableCellCombinations = new ArrayList<>();
+
+            boolean cellsCubeMidTop = isWater(cellsCube.get(1));
+            boolean cellsCubeFirstMid = isWater(cellsCube.get(3));
+            boolean cellsCubeLastMid = isWater(cellsCube.get(5));
+            boolean cellsCubeMidBottom = isWater(cellsCube.get(7));
+
+            if (shipLength == 2) {
+                if(cellsCubeMidTop) {
+                    if(isWater(cellsCube.get(0))) {
+                        availableCellCombinations.add(new int[]{cellsCube.get(0),cellsCube.get(1)});
+                    }
+                    if(isWater(cellsCube.get(2))) {
+                        availableCellCombinations.add(new int[]{cellsCube.get(1),cellsCube.get(2)});
+                    }
+                }
+
+                if(cellsCubeFirstMid) {
+                    if(isWater(cellsCube.get(0))) {
+                        availableCellCombinations.add(new int[]{cellsCube.get(0),cellsCube.get(3)});
+                    }
+                    if(isWater(cellsCube.get(6))) {
+                        availableCellCombinations.add(new int[]{cellsCube.get(3),cellsCube.get(6)});
+                    }
+                    if(isWater(cellsCube.get(4))) {
+                        availableCellCombinations.add(new int[]{cellsCube.get(3),cellsCube.get(4)});
+                    }
+                }
+
+                if(cellsCubeLastMid) {
+                    if(isWater(cellsCube.get(2))) {
+                        availableCellCombinations.add(new int[]{cellsCube.get(2),cellsCube.get(5)});
+                    }
+                    if(isWater(cellsCube.get(8))) {
+                        availableCellCombinations.add(new int[]{cellsCube.get(5),cellsCube.get(8)});
+                    }
+                    if(isWater(cellsCube.get(4))) {
+                        availableCellCombinations.add(new int[]{cellsCube.get(4),cellsCube.get(5)});
+                    }
+                }
+
+                if(cellsCubeMidBottom) {
+                    if(isWater(cellsCube.get(6))) {
+                        availableCellCombinations.add(new int[]{cellsCube.get(6),cellsCube.get(7)});
+                    }
+                    if(isWater(cellsCube.get(8))) {
+                        availableCellCombinations.add(new int[]{cellsCube.get(7),cellsCube.get(8)});
+                    }
+                }
+            }
+            if (shipLength == 3) {
+                if(cellsCubeMidTop) {
+                    if(isWater(cellsCube.get(0)) && isWater(cellsCube.get(2))) {
+                        availableCellCombinations.add(
+                            new int[]{cellsCube.get(0),cellsCube.get(1),cellsCube.get(2)}
+                        );
+                    }
+                    if(isWater(cellsCube.get(4)) && isWater(cellsCube.get(7))) {
+                        availableCellCombinations.add(
+                            new int[]{cellsCube.get(1),cellsCube.get(4),cellsCube.get(7)}
+                        );
+                    }
+                }
+                if(cellsCubeFirstMid) {
+                    if(isWater(cellsCube.get(0)) && isWater(cellsCube.get(6))) {
+                        availableCellCombinations.add(
+                                new int[]{cellsCube.get(0),cellsCube.get(3),cellsCube.get(6)}
+                        );
+                    }
+                }
+                if(cellsCubeLastMid) {
+                    if(isWater(cellsCube.get(2)) && isWater(cellsCube.get(8))) {
+                        availableCellCombinations.add(
+                                new int[]{cellsCube.get(2),cellsCube.get(5),cellsCube.get(8)}
+                        );
+                    }
+                }
+            }
+            int randomIndex =  random.nextInt(availableCellCombinations.size());
+            return availableCellCombinations.get(randomIndex);
+        }
+
+        private ArrayList<Integer> getRandomShipCoords(int shipLength) {
+            ArrayList<Integer> randomCellsCube = getRandomCellsCube();
+            ArrayList<Integer> generatedCoords = new ArrayList<>();
+            Random random = new Random();
+
+            if(shipLength == 1) {
+                generatedCoords.add(getRandomCellIndexFromCube(randomCellsCube));
+            } else {
+                for(int i : getRandomCellIndexesFromCube(randomCellsCube,shipLength)) {
+                    generatedCoords.add(i);
+                }
+            }
+            return generatedCoords;
+        }
+
+        private boolean setShip(int[] shipCells) {
+            boolean canFit = true;
+            String ship = "Ship";
+            for(int shipCell : shipCells) {
+                if(shipList.get(shipCell).equals(" ")) {
+                    shipList.set(shipCell, ship);
+                } else {
+                    canFit = false;
+                }
+            }
+            return canFit;
+        }
+
+    }
+
+
 }
