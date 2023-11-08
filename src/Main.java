@@ -1487,12 +1487,6 @@ public class Main {
         private JTextArea textArea = new JTextArea(10, 30);
         private Color waterColor = new Color(173, 216, 230);
 
-        // Mesures
-        private final int topLeftCorner_cell = 0;
-        private final int topRightCorner_cell = 9;
-        private final int bottomLeftCorner_cell = 40;
-        private final int bottomRightCorner_cell = 49;
-
         BattleShip() {
             setup();
         }
