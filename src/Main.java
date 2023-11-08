@@ -1473,14 +1473,17 @@ public class Main {
     static class BattleShip {
 
         private final int cellNumber = 50;
-        private ArrayList<String> shipList = new ArrayList<>();
-        private int shipCount = 0;
+        private ArrayList<String> cellList = new ArrayList<>();
+        private int shipPartsCount = 0;
+        private int foundShipParts = 0;
         private final int shipCountEasy = 5;
         private final int shipCountMedium = 4;
         private final int shipCountDifficult = 3;
         private int turnCount = 0;
         private Scanner sc = new Scanner(System.in);
         private JFrame frame = new JFrame("BattleShip");
+        private ArrayList<JButton> layoutButtons = new ArrayList<>();
+        private ArrayList<Integer> pressedCells = new ArrayList<>();
         private JTextArea textArea = new JTextArea(10, 30);
         private Color waterColor = new Color(173, 216, 230);
 
@@ -1496,7 +1499,7 @@ public class Main {
 
         private void setup() {
             for(int i = 0; i < cellNumber; i++) {
-                shipList.add(" ");
+                cellList.add(" ");
             }
             buildWindow();
             generateShips();
@@ -1504,6 +1507,12 @@ public class Main {
         }
 
         private void buildWindow() {
+            Image icon = Toolkit.getDefaultToolkit().getImage("src/battleShipLogo.png");
+            Image redSphere = Toolkit.getDefaultToolkit().getImage("src/redSphere.png");
+            int width = 40;
+            int height = 40;
+            Image resizedImage = redSphere.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+
             JPanel topPanel = new JPanel(new GridLayout(5, 5));
             Dimension buttonSize = new Dimension(50, 50); // Adjust the size as needed
 
@@ -1515,19 +1524,25 @@ public class Main {
                 button.setBackground(waterColor);
                 button.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
-                        incrementTurnCount();
-                        printTurn(getCellValue(index));
                         if(isWater(index)) {
                             button.setBackground(Color.BLUE);
                         } else {
-                            button.setBackground(Color.RED);
+                            button.setIcon(new ImageIcon(resizedImage));
+                            button.setBackground(Color.BLUE);
+                            foundShipParts++;
                         }
-
-                        button.setEnabled(false);
+                        if(!pressedCells.contains(index)) {
+                            pressedCells.add(index);
+                            incrementTurnCount();
+                            printTurn(getCellValue(index));
+                        }
+                        if(areAllShipsDestroyed()) {
+                            endGame();
+                        }
 
                     }
                 });
-
+                layoutButtons.add(button);
                 topPanel.add(button);
             }
             textArea.setEditable(false);
@@ -1548,6 +1563,7 @@ public class Main {
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setResizable(false);
             frame.setLocationRelativeTo(null);
+            frame.setIconImage(icon);
             frame.setVisible(true);
             textArea.setBackground(Color.BLACK);
             textArea.setForeground(Color.WHITE);
@@ -1561,7 +1577,7 @@ public class Main {
             print("Welcome to BattleShip game");
             print("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
             print("You have to discover where are the hidden ships.");
-            print("There are " + shipCount + " ships. Good luck!");
+            print("There are " + shipPartsCount + " map cells filled with ship parts. Good luck!");
         }
         private void incrementTurnCount() {
             turnCount++;
@@ -1573,7 +1589,7 @@ public class Main {
         }
 
         private String getCellValue(int cellIndex) {
-            String cellValue = shipList.get(cellIndex);
+            String cellValue = cellList.get(cellIndex);
             String result;
             if(cellValue.equals(" ")) {
                 result = "Water";
@@ -1582,20 +1598,36 @@ public class Main {
             }
             return result;
         }
+
+        private void printGameEndMessage() {
+            print("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+            print("GG! You found all the ships!");
+            print("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+        }
+
+        private void disableAllButtons() {
+            for(int i = 0; i < layoutButtons.size(); i++) {
+                JButton button = layoutButtons.get(i);
+                button.setBackground(Color.BLUE);
+                button.setEnabled(false);
+            }
+        }
+
+        private void endGame() {
+            printGameEndMessage();
+            disableAllButtons();
+        }
+        private boolean areAllShipsDestroyed() {
+            return foundShipParts == shipPartsCount;
+        }
         private Boolean isWater(int cellIndex) {
-            return shipList.get(cellIndex).equals(" ");
+            return cellList.get(cellIndex).equals(" ");
         }
 
         private void generateShips() {
-            for(int i : getRandomShipCoords(1)) {
-                setShip(new int[]{i});
-            }
-            for(int i : getRandomShipCoords(2)) {
-                setShip(new int[]{i});
-            }
-            for(int i : getRandomShipCoords(3)) {
-                setShip(new int[]{i});
-            }
+            setShip(getRandomShipCoords(1));
+            setShip(getRandomShipCoords(2));
+            setShip(getRandomShipCoords(3));
         }
 
         private ArrayList<Integer> getRandomCellsCube() {
@@ -1618,7 +1650,7 @@ public class Main {
             while (!validCoords) {
                 int randomCellIndex = cellsCube.get(random.nextInt(cellsCube.size()));
 
-                if(shipList.get(randomCellIndex).equals("Ship")) {
+                if(cellList.get(randomCellIndex).equals("Ship")) {
                     validCoords = false;
                 } else {
                     result = randomCellIndex;
@@ -1725,16 +1757,17 @@ public class Main {
             }
             return generatedCoords;
         }
-
-        private boolean setShip(int[] shipCells) {
+        
+        private boolean setShip(ArrayList<Integer> shipCells) {
             boolean canFit = true;
             String ship = "Ship";
             for(int shipCell : shipCells) {
-                if(shipList.get(shipCell).equals(" ")) {
-                    shipList.set(shipCell, ship);
+                if(cellList.get(shipCell).equals(" ")) {
+                    cellList.set(shipCell, ship);
                 } else {
                     canFit = false;
                 }
+                shipPartsCount++;
             }
             return canFit;
         }
