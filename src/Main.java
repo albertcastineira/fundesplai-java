@@ -1518,14 +1518,15 @@ public class Main {
                 button.setBackground(waterColor);
                 button.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
-                        if(isWater(index)) {
-                            button.setBackground(Color.BLUE);
-                        } else {
-                            button.setIcon(new ImageIcon(resizedImage));
-                            button.setBackground(Color.BLUE);
-                            foundShipParts++;
-                        }
                         if(!pressedCells.contains(index)) {
+                            if(isWater(index)) {
+                                button.setBackground(Color.BLUE);
+                            } else {
+                                foundShipParts++;
+                                button.setIcon(new ImageIcon(resizedImage));
+                                button.setBackground(Color.BLUE);
+                            }
+
                             pressedCells.add(index);
                             incrementTurnCount();
                             printTurn(getCellValue(index));
@@ -1570,7 +1571,8 @@ public class Main {
         private void printGameStartMessage() {
             print("Welcome to BattleShip game");
             print("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
-            print("You have to discover where are the hidden ships.");
+            print("You have to discover where are the 3 hidden ships.");
+            print("The ship sizes are 1-3 horizontally or vertically.");
             print("There are " + shipPartsCount + " map cells filled with ship parts. Good luck!");
         }
         private void incrementTurnCount() {
